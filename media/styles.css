@@ -1,0 +1,30 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background-color: #1e1e1e;
+  color: white;
+}
+
+h2 {
+  color: #00ccff;
+}
+
+input[type='color'] {
+  width: 100px;
+  height: 50px;
+  border: none;
+  margin: 10px 0;
+}
+
+button {
+  background-color: #007acc;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
