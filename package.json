@@ -1,7 +1,7 @@
 {
   "name": "colorcodestore",
   "displayName": "colorcodestore",
-  "description": "",
+  "description": "A color picker and manager for VS Code",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"
@@ -9,16 +9,34 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:colorcodestore-view"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Color Code Store",
+      "properties": {
+        "colorcodestore.savedColors": {
+          "type": "array",
+          "default": [],
+          "description": "Stores your collection of saved colors"
+        },
+        "colorcodestore.projects": {
+          "type": "array",
+          "default": [],
+          "description": "Stores your color projects"
+        },
+        "colorcodestore.currentProjectId": {
+          "type": "string",
+          "default": null,
+          "description": "Current active project ID"
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {
           "id": "colorcodestore-sidebar",
-          "title": "Color Picker",
+          "title": "Color Store",
           "icon": "media/icon.svg"
         }
       ]
@@ -27,9 +45,48 @@
       "colorcodestore-sidebar": [
         {
           "id": "colorcodestore-view",
-          "name": "Color Picker",
+          "name": "Color Store",
           "type": "webview",
           "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "colorcodestore.addColor",
+        "title": "Add Color",
+        "category": "Color Code Store"
+      },
+      {
+        "command": "colorcodestore.createProject",
+        "title": "Create New Project",
+        "category": "Color Store"
+      },
+      {
+        "command": "colorcodestore.switchProject",
+        "title": "Switch Project",
+        "category": "Color Store"
+      },
+      {
+        "command": "colorcodestore.deleteProject",
+        "title": "Delete Project",
+        "category": "Color Store"
+      },
+      {
+        "command": "colorcodestore.showProjects",
+        "title": "Show Projects",
+        "category": "Color Store"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "colorcodestore.createProject",
+          "when": "view == colorcodestore-view"
+        },
+        {
+          "command": "colorcodestore.showProjects",
+          "when": "view == colorcodestore-view"
         }
       ]
     }
