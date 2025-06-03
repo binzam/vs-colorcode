@@ -26,6 +26,7 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
   constructor(private readonly extensionUri: vscode.Uri) {
     this.loadData();
   }
+
   private async loadData() {
     const config = vscode.workspace.getConfiguration('colorcodestore');
     this.savedColors = (await config.get('savedColors')) || [];
@@ -65,22 +66,10 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
 
     webviewView.webview.onDidReceiveMessage(async (message) => {
+      console.log('message>>', message);
       switch (message.command) {
         case 'ready': //  handle webview ready state
           this.updateWebview();
-          return;
-        case 'switchView':
-          this.currentView = message.view;
-          this.updateWebview();
-          return;
-        case 'selectProject':
-          this.currentProjectId = message.projectId;
-          this.currentView = 'project-colors';
-          this.updateWebview();
-          return;
-        case 'copy':
-          vscode.env.clipboard.writeText(message.text);
-          vscode.window.showInformationMessage(`Copied: ${message.text}`);
           return;
         case 'addColor':
           if (this.isValidColor(message.color)) {
@@ -98,6 +87,20 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
             this.updateWebview();
           }
           return;
+        case 'switchView':
+          this.currentView = message.view;
+          this.updateWebview();
+          return;
+        case 'selectProject':
+          this.currentProjectId = message.projectId;
+          this.currentView = 'project-colors';
+          this.updateWebview();
+          return;
+        case 'copy':
+          vscode.env.clipboard.writeText(message.text);
+          vscode.window.showInformationMessage(`Copied: ${message.text}`);
+          return;
+
         case 'removeColor':
           if (message.from === 'project' && this.currentProjectId) {
             const project = this.projects.find(
@@ -131,11 +134,11 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
             this.updateWebview();
           }
           return;
-        // case 'switchProject':
-        //   this.currentProjectId = message.projectId;
-        //   await this.saveData();
-        //   this.updateWebview();
-        //   return;
+        case 'switchProject':
+          this.currentProjectId = message.projectId;
+          await this.saveData();
+          this.updateWebview();
+          return;
         case 'deleteProject':
           this.projects = this.projects.filter(
             (p) => p.id !== message.projectId
@@ -147,9 +150,21 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           await this.saveData();
           this.updateWebview();
           return;
+        case 'previewColor': {
+          const color = message.color;
+          const panel = vscode.window.createWebviewPanel(
+            'colorPreview',
+            `Color Preview: ${color}`,
+            vscode.ViewColumn.One,
+            { enableScripts: false }
+          );
+          panel.webview.html = getColorPreviewHtml(color);
+          return;
+        }
       }
     });
   }
+
   private isValidColor(color: string): boolean {
     // Simple validation - expand this with more robust checks
     return /^(#([0-9A-Fa-f]{3}){1,2}|(rgb|hsl)a?\(\s*\d+\s*,\s*\d+\s*%?\s*,\s*\d+\s*%?\s*(,\s*[\d.]+\s*)?\))$/.test(
@@ -177,7 +192,6 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
         : null,
     });
   }
-
   private getHtmlForWebview(webview: vscode.Webview): string {
     const cssUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'styles.css')
@@ -185,6 +199,14 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
 
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'main.js')
+    );
+    const fontUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this.extensionUri,
+        'media',
+        'fonts',
+        'Inter-Regular.woff2'
+      )
     );
 
     return /*html*/ `
@@ -194,7 +216,21 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Store</title>
+     <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('${fontUri}') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
     <link href="${cssUri}" rel="stylesheet" />
+
   </head>
   <body>
     <div class="main-nav">
@@ -211,19 +247,19 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           id="savedColorsInput"
           placeholder="Enter color (hex, rgb, rgba, hsl)"
         />
-        <button class="add-color-btn" id="addSavedColorBtn">Add Color</button>
+      <button class="add-color-btn" id="addSavedColorBtn">+ Add Color</button>
       </div>
       <div id="savedColorsList"></div>
     </div>
 
     <!-- Projects View -->
-    <div id="projectsView" class="view-content" style="display: none">
+    <div id="projectsView" class="view-content" >
       <button class="new-prj-btn" id="newProjectBtn">+ New Project</button>
       <div id="projectsList"></div>
     </div>
 
     <!-- Project Colors View -->
-    <div id="projectColorsView" class="view-content" style="display: none">
+    <div id="projectColorsView" class="view-content" >
       <h3 id="projectColorsTitle"></h3>
       <div class="color-input-bar">
         <input
@@ -232,7 +268,7 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           id="projectColorInput"
           placeholder="Enter color (hex, rgb, rgba, hsl)"
         />
-        <button class="add-color-btn" id="addProjectColorBtn">Add Color</button>
+  <button class="add-color-btn" id="addProjectColorBtn">Add Color</button>
       </div>
       <div id="projectColorsList"></div>
     </div>
@@ -243,8 +279,8 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
         <h3>Create New Project</h3>
         <input type="text" id="projectNameInput" placeholder="Project name" />
         <div class="project-modal-actions">
-          <button class="action-btn" id="createProjectBtn">Create</button>
-          <button class="action-btn" id="cancelProjectBtn">Cancel</button>
+          <button class="action-btn create-btn" id="createProjectBtn">Create</button>
+          <button class="action-btn cancel-btn" id="cancelProjectBtn">Cancel</button>
         </div>
       </div>
     </div>
@@ -255,6 +291,64 @@ class ColorPickerViewProvider implements vscode.WebviewViewProvider {
 
         `;
   }
+}
+
+function getColorPreviewHtml(color: string): string {
+  return /*html*/ `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Color Preview</title>
+    <style>
+      body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #1e1e1e; }
+      .color-label {
+        margin-bottom: 24px;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.2em;
+        letter-spacing: 1px;
+        text-align: center;
+      }
+      .color-box {
+        width: 300px;
+        height: 120px;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+        background: ${color};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        color: #fff;
+        border: 2px solid #fff;
+        margin-bottom: 32px;
+        }
+        .color-text {
+        margin-bottom: 32px;
+        width: 300px;
+        height: 120px;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        color: ${color};
+        border: 2px solid #fff;
+      }
+      .color-text.bold{
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="color-label">Preview: <b>${color}</b></div>
+    <div class="color-box">Background</div>
+    <div class="color-text">Regular Text</div>
+    <div class="color-text bold">Bold Text</div>
+  </body>
+  </html>`;
 }
 
 export function deactivate() {}
