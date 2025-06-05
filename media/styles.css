@@ -7,6 +7,8 @@
 }
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 body {
   font-family: 'Inter', sans-serif;
@@ -43,7 +45,12 @@ button {
   /* display: none; */
   padding: 10px;
 }
-
+.project-listing,
+.color-listing {
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .color-input-bar {
   width: 100%;
   display: flex;
@@ -90,14 +97,36 @@ input.color-input:focus {
   padding: 5px 10px;
   border-radius: 5px;
 }
-.copy-btn {
-  background-color: #005fa3;
-}
-.remove-btn {
-  background: red;
-}
 .action-btn:hover {
   background-color: #007acc;
+}
+
+.copy-btn {
+  padding: 4px;
+  background-color: #005fa3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 4px;
+}
+.copy-btn:hover {
+  background-color: #007acc;
+}
+.preview-btn {
+  padding: 4px 8px;
+  background-color: #023047;
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #023047;
+  transition: all 0.3s ease;
+}
+.preview-btn:hover {
+  background-color: #333;
+  border: 1px solid #005fa3;
 }
 
 .project-modal {
@@ -139,74 +168,151 @@ input.color-input:focus {
 /* from main.js  */
 /* color item/bar*/
 .color-item {
+  max-width: 500px;
   margin: 5px 0;
-  padding: 5px;
+  padding: 10px 5px;
   background: #ffffff;
   border-radius: 3px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  column-gap: 5px;
+  gap: 5px;
   position: relative;
 }
-.color-display {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ccc;
-  vertical-align: middle;
-  margin-right: 10px;
-}
+
 .color-code {
   color: #1e1e1e;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 8px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 5px;
+  box-shadow: 0px 2px 2px #333;
 }
 .color-actions {
+  display: flex;
+  align-items: center;
   margin-left: auto;
+  gap: 5px;
+  padding: 3px 8px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  box-shadow: 0px 2px 2px #333;
 }
-.preview-btn {
-  background-color: #023047;
-}
+
 .copy-options {
   position: absolute;
   right: 0;
   top: 100%;
-  margin-top: 4px;
-  background: #333;
-  border: 1px solid #ccc;
+  margin-top: -5px;
+  background: #111111d5;
+  border: 2px dotted #ccc;
   display: none;
   flex-direction: column;
-  padding: 4px;
+  padding: 5px 4px;
   z-index: 10;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  font-size: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
 }
 
 .copy-option {
-  padding: 4px 8px;
+  padding: 4px;
   cursor: pointer;
   border: none;
+  background-color: #222;
+  border-radius: 3px;
+  box-shadow: 0px 2px 2px #000;
   background: none;
   text-align: left;
   width: max-content;
   margin: 3px 0;
+  font-size: 12px;
   width: 100%;
 }
 
 .copy-option:hover {
-  background-color: #222;
+  background-color: #111;
 }
 /* end color item/bar*/
-
+/* pproject listing  */
+.back-to-projects-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  background-color: #005fa3;
+  color: #ffffff;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  gap: 3px;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+.back-to-projects-btn:hover {
+  color: #005fa3;
+  background-color: #1e1e1e;
+}
+.project-title {
+  text-transform: uppercase;
+  color: #ffffff;
+  font-weight: bold;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #fff;
+  margin: 15px 0;
+}
 .project-item {
-  padding: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  justify-content: space-between;
+  padding: 8px 12px;
   cursor: pointer;
+  border-radius: 4px;
   border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
 }
 .project-item:hover {
   background-color: var(--vscode-list-hoverBackground);
 }
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.project-name {
+  color: var(--vscode-descriptionForeground);
+  font-size: 1em;
+}
 .project-color-count {
-  float: right;
   color: var(--vscode-descriptionForeground);
   font-size: 0.9em;
+}
+.delete-project-btn,
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--vscode-icon-foreground);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  margin-left: auto;
+}
+.remove-btn {
+  background-color: #1e1e1e;
+  margin: 0;
+}
+.delete-project-btn:hover,
+.remove-btn:hover {
+  background-color: var(--vscode-list-activeSelectionBackground);
+  color: var(--vscode-errorForeground);
+  opacity: 1;
+}
+
+.delete-project-btn svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }
