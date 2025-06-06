@@ -1,71 +1,39 @@
 # colorcodestore README
 
-This is the README for your extension "colorcodestore". After writing up a brief description, we recommend including the following sections.
+# extension.ts
 
-## Features
+- the entry point for a VS Code extension — it defines what happens when the extension is activated or deactivated.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## purpose
 
-For example if there is an image subfolder under your extension project workspace:
+It wires up and registers:
 
-\!\[feature X\]\(images/feature-x.png\)
+- A Webview View Provider (the sidebar UI)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- A Command (colorcodestore.previewColor) to preview colors in a separate panel
 
-## Requirements
+# class ColorPickerViewProvider
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- a Visual Studio Code extension class responsible for rendering and managing a side panel (WebviewView) that acts as a color management UI. It's built using the VS Code Webview API and communicates with a backend manager (ColorProjectManager) to let users:
 
-## Extension Settings
+## purpose
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- To provide an interactive color picker and manager as a sidebar view in VS Code where users can:
 
-For example:
+- Add/remove saved colors
 
-This extension contributes the following settings:
+- Create/select/delete projects
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- Assign colors to projects
 
-## Known Issues
+- Preview, copy, and organize colors
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+# class ColorPreviewPanel
 
-## Release Notes
+- class that creates and displays a webview panel in VS Code to show a visual preview of a color the user selects. This is part of a Visual Studio Code extension.
 
-Users appreciate release notes as you update your extension.
+# ColorProjectManager class
 
-### 1.0.0
+- a Backend manager class for color data. backend utility/service for a Visual Studio Code extension that helps manage saved colors and color projects.
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- It handles all data-related logic — including loading, saving, adding, removing, and organizing colors — and provides a bridge between persistent VS Code configuration storage and the webview-based frontend UI.

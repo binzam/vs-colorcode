@@ -11,6 +11,9 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "webviewResources": [
+    "media/**/*"
+  ],
   "contributes": {
     "configuration": {
       "title": "Color Code Store",
@@ -37,7 +40,7 @@
         {
           "id": "colorcodestore-sidebar",
           "title": "Color Store",
-          "icon": "media/color-store-icon.png"
+          "icon": "media/icons/color-store-icon.png"
         }
       ]
     },
@@ -47,7 +50,7 @@
           "id": "colorcodestore-view",
           "name": "Color Store",
           "type": "webview",
-          "icon": "media/color-store-icon.png"
+          "icon": "media/icons/color-store-icon.png"
         }
       ]
     },

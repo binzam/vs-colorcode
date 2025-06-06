@@ -1,0 +1,37 @@
+.color-label {
+  margin-bottom: 24px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2em;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.color-box {
+  width: 300px;
+  height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  border: 2px solid #fff;
+  margin-bottom: 32px;
+}
+.color-text {
+  margin-bottom: 32px;
+  width: 300px;
+  height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  border: 2px solid #fff;
+}
+.color-text.bold {
+  font-weight: bold;
+}

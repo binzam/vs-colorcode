@@ -1,26 +1,28 @@
 import * as vscode from 'vscode';
 import { ColorPreviewPanel } from './preview/ColorPreviewPanel';
 import { ColorPickerViewProvider } from './webview/ColorPickerViewProvider';
+import { fetchThemes } from './utils/api';
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new ColorPickerViewProvider(context.extensionUri);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      'colorcodestore-view',
-      provider,
-      {
-        webviewOptions: {
-          retainContextWhenHidden: true,
-        },
-      }
-    )
-  ); 
+    vscode.window.registerWebviewViewProvider('colorcodestore-view', provider, {
+      webviewOptions: {
+        retainContextWhenHidden: true,
+      },
+    })
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       'colorcodestore.previewColor',
-      (color: string) => {
-        ColorPreviewPanel.show(color, context.extensionUri);
+      async (color: string) => {
+        const themes: any = await fetchThemes(color);
+        if (themes.length > 0) {
+          ColorPreviewPanel.show(themes, context.extensionUri);
+        } else {
+          vscode.window.showErrorMessage('Failed to load themes.');
+        }
       }
     )
   );

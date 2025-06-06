@@ -103,10 +103,10 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
 
   private getHtmlForWebview(webview: vscode.Webview): string {
     const cssUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'media', 'styles.css')
+      vscode.Uri.joinPath(this.extensionUri, 'media', 'styles', 'styles.css')
     );
     const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'media', 'main.js')
+      vscode.Uri.joinPath(this.extensionUri, 'media', 'scripts', 'main.js')
     );
     const fontUri = webview.asWebviewUri(
       vscode.Uri.joinPath(
@@ -116,7 +116,6 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
         'Inter-Regular.woff2'
       )
     );
-
     return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
@@ -174,7 +173,7 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
             </div>
           </div>
         </div>
-        <script src="${scriptUri}"></script>
+        <script type="module" src="${scriptUri}"></script>
       </body>
       </html>
     `;

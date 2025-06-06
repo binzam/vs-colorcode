@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Inter';
-  src: url('fonts/Inter-Regular.woff2') format('woff2');
+  src: url('../fonts/Inter-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -47,7 +47,7 @@ button {
 }
 .project-listing,
 .color-listing {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 170px);
   overflow-y: auto;
   overflow-x: hidden;
 }
