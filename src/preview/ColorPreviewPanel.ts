@@ -1,35 +1,91 @@
 import * as vscode from 'vscode';
+import { Theme } from '../utils/types';
 export class ColorPreviewPanel {
-  static show(themes: any[], extensionUri: vscode.Uri) {
+  static show(mainColor: string, themes: Theme[], extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       'colorPreview',
       `Theme Preview`,
       vscode.ViewColumn.One,
       { enableScripts: true }
     );
-    panel.webview.html = this.getHtml(themes, panel.webview, extensionUri);
+    panel.webview.html = this.getHtml(
+      mainColor,
+      themes,
+      panel.webview,
+      extensionUri
+    );
   }
 
   private static getHtml(
-    themes: any[],
+    mainColor: string,
+    themes: Theme[],
     webview: vscode.Webview,
     extensionUri: vscode.Uri
   ): string {
+    const stylePath = vscode.Uri.joinPath(
+      extensionUri,
+      'media',
+      'styles',
+      'previewStyles.css'
+    );
+    const styleUri = webview.asWebviewUri(stylePath);
+    const scriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, 'media', 'scripts', 'preview.js')
+    );
     const themeHtml = themes
       .map(
-        (theme) => `
-    <div class="theme-card" style="background: ${theme.background}; color: ${theme.text}; padding: 20px; border-radius: 12px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s ease-in-out; cursor: pointer;">
-        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">${theme.name}</h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">${theme.description}</p>
-        <button style="width: 100%; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: medium; border: none; cursor: pointer; background: ${theme.accent}; color: ${theme.background}; transition: background 0.3s ease;">Try Theme</button>
-        <div class="color-swatch-container" style="display: flex; justify-content: center; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 10px; margin-top: 10px;">
-            <div class="color-swatch" style="width: 25px; height: 25px; border-radius: 5px; border: 1px solid ${theme.text}; background: ${theme.background};"></div>
-            <span style="font-size: 0.8rem; font-weight: bold; margin-top: 5px; color: ${theme.text};">Bg</span>
-            <div class="color-swatch" style="width: 25px; height: 25px; border-radius: 5px; border: 1px solid ${theme.accent}; background: ${theme.text};"></div>
-            <span style="font-size: 0.8rem; font-weight: bold; margin-top: 5px; color: ${theme.text};">Text</span>
-            <div class="color-swatch" style="width: 25px; height: 25px; border-radius: 5px; border: 1px solid ${theme.text}; background: ${theme.accent};"></div>
-            <span style="font-size: 0.8rem; font-weight: bold; margin-top: 5px; color: ${theme.text};">Accent</span>
+        (theme) => /*html*/ `
+    <div class="theme-row">
+    <div class="theme-header">
+    <div class="color-swatch-header" style="background: ${mainColor}"></div>
+    <p class="color-role" style="color: ${mainColor};" >
+    ${mainColor} as ${theme.role}
+    </p>
+    </div>
+    <div class="theme-swatch-wrapper">
+    <div class="color-swatch-container">
+
+            <div class="swatch-label-wrapper"  data-color="${theme.background}">
+            <div class="code-swatch-col">
+            <span class="color-label">Bg</span>
+            <p class="color-code">${theme.background}</p>
+            </div>
+            <div class="color-swatch" style="background: ${theme.background}"></div>
+            <div class="swatch-overlay"></div>
+            </div>
+
+            <div class="swatch-label-wrapper"  data-color="${theme.text}">
+            <div class="code-swatch-col">
+            <span class="color-label">Text</span>
+            <p class="color-code">${theme.text}</p>
+            </div>
+            <div class="color-swatch" style="background: ${theme.text}"></div>
+            <div class="swatch-overlay"></div>
+
+            </div>
+
+            <div class="swatch-label-wrapper"  data-color="${theme.accent}">
+            <div class="code-swatch-col">
+            <span class="color-label">Accent</span>
+            <p class="color-code">${theme.accent}</p>
+            </div>
+            <div class="color-swatch" style="background: ${theme.accent}"></div>
+            <div class="swatch-overlay"></div>
+
+            </div>         
+            
         </div>
+    <div class="theme-card-main" style="background: ${theme.background}; color: ${theme.text}">
+        <h3>${theme.name}</h3>
+        <p>${theme.description}</p>
+        <button class="theme-card-btn" style="background: ${theme.accent};">
+        
+        <span class="theme-card-btn-label"  style="background: ${theme.background}; color: ${theme.text}"></span> 
+        
+        </button>
+        
+    </div>
+    </div>
     </div>
   `
       )
@@ -41,90 +97,23 @@ export class ColorPreviewPanel {
       <head>
         <meta charset="UTF-8">
         <title>Theme Preview</title>
-        <style>
-          body { font-family: Arial, sans-serif; background: #1e1e1e; color: white; padding: 20px; }
-          .theme-container { display: flex; flex-direction: column; gap: 10px; }
-       
-       body {
-  font-family: Arial, sans-serif;
-  background: #1e1e1e;
-  color: white;
-  padding: 20px;
-}
-
-.theme-container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  margin: auto;
-}
-
-.theme-card {
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.theme-card:hover {
-  transform: scale(1.02);
-}
-
-.theme-card h3 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.theme-card p {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.button-accent {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: medium;
-  transition: background 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.button-accent:hover {
-  opacity: 0.9;
-}
-
-.color-swatch-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  margin-top: 10px;
-}
-
-.color-swatch {
-  width: 25px;
-  height: 25px;
-  border-radius: 5px;
-  border: 1px solid white;
-}
-
-.color-label {
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-top: 5px;
-}
-       </style>
+              <link href="${styleUri}" rel="stylesheet">
       </head>
       <body>
-        <h2>Available Themes</h2>
-        <div class="theme-container">${themeHtml}</div>
+         <div class="preview-header">
+       <h2>Color theme suggestions</h2>
+      <p>These themes complement your color <strong><small>*${mainColor}*</small></strong> </p>
+      <p>You can copy any of the color by hovering over them.</p>
+      </div>
+        <div class="theme-container"  id="themeContainer">
+           <div class="bg-control">
+        <label for="bg-picker">Change background</label>
+        <input type="color" id="bg-picker" value="#ffffff" title="Choose background color">
+      </div>
+        ${themeHtml}</div>
+        
+        <script type="module" src="${scriptUri}"></script>
+
       </body>
       </html>
     `;

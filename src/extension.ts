@@ -17,9 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       'colorcodestore.previewColor',
       async (color: string) => {
-        const themes: any = await fetchThemes(color);
+        const { mainColor, themes } = await fetchThemes(color);
         if (themes.length > 0) {
-          ColorPreviewPanel.show(themes, context.extensionUri);
+          ColorPreviewPanel.show(mainColor, themes, context.extensionUri);
         } else {
           vscode.window.showErrorMessage('Failed to load themes.');
         }

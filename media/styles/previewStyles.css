@@ -1,37 +1,201 @@
-.color-label {
-  margin-bottom: 24px;
-  color: #fff;
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
   font-family: 'Inter', sans-serif;
-  font-size: 1.2em;
-  letter-spacing: 1px;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 20px;
+}
+.preview-header {
   text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--vscode-editorWidget-border);
+}
+.preview-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.theme-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  transition: background 0.3s ease;
+  position: relative;
+}
+.bg-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+.bg-control label {
+  font-size: 0.8rem;
+  color: #333;
+}
+.bg-control input[type='color'] {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.theme-row {
+  width: 100%;
+}
+.theme-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.color-swatch-header {
+  width: 40px;
+  height: 25px;
+  border-radius: 5px;
+  border: 2px solid #000000;
+}
+.color-role {
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.theme-swatch-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
 }
 
-.color-box {
-  width: 300px;
-  height: 120px;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+.color-swatch-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.swatch-label-wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 5px;
+  color: #ffffff;
+  background-color: #000000d5;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+}
+.swatch-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  background: rgba(38, 119, 0, 0.8);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
-  border: 2px solid #fff;
-  margin-bottom: 32px;
-}
-.color-text {
-  margin-bottom: 32px;
-  width: 300px;
-  height: 120px;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2em;
-  border: 2px solid #fff;
-}
-.color-text.bold {
+  font-size: 12px;
   font-weight: bold;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+}
+.color-label {
+  font-size: 0.8rem;
+}
+.code-swatch-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+}
+.color-code {
+  width:max-content;
+  font-size: 0.8rem;
+}
+
+.color-swatch {
+  width: 25px;
+  height: 100%;
+  border-radius: 5px;
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.theme-card-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.theme-card-main:hover {
+  transform: scale(1.02);
+}
+
+.theme-card-main h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.theme-card-main p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+.theme-card-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.theme-card-btn-label {
+  padding: 5px 10px;
+  border-radius: 4px;
 }
