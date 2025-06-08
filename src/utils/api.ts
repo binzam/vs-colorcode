@@ -6,7 +6,7 @@ interface ApiResponse {
 }
 export async function fetchThemes(color: string): Promise<ThemeCollection> {
   try {
-    const response = await fetch('http://localhost:3000/themes', {
+    const response = await fetch('http://localhost:3000/api/themes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

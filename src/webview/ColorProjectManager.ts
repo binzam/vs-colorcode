@@ -19,7 +19,7 @@ export class ColorProjectManager {
         this.savedColors = [];
         this.projects = [];
         this.currentProjectId = null;
-        this.initialized = true; 
+        this.initialized = true;
       }
     }
   }
@@ -65,40 +65,76 @@ export class ColorProjectManager {
   public async addColor(
     color: string,
     from: 'saved' | 'project' = 'saved'
-  ): Promise<boolean> {
-    if (!isValidColor(color)) {
-      return false;
+  ): Promise<{ success: boolean; message?: string; color?: string }> {
+    const { isValid, acceptableColor } = isValidColor(color);
+    if (!isValid || !acceptableColor) {
+      return { success: false, message: 'Invalid color format.' };
     }
-
+    const colorToSave = acceptableColor;
     if (from === 'project' && this.currentProjectId) {
       const project = this.projects.find((p) => p.id === this.currentProjectId);
       if (project) {
-        project.colors.unshift(color);
+        if (project.colors.includes(colorToSave)) {
+          return {
+            success: false,
+            message: `${colorToSave} is already in this Project.`,
+          };
+        }
+        project.colors.unshift(colorToSave);
+        await this.saveData();
+        return {
+          success: true,
+          color: colorToSave,
+          message: `${colorToSave} added to Project.`,
+        };
       }
     } else {
-      this.savedColors.unshift(color);
+      if (this.savedColors.includes(colorToSave)) {
+        return {
+          success: false,
+          message: `${colorToSave} is already in Saved colors.`,
+        };
+      }
+      this.savedColors.unshift(colorToSave);
+      await this.saveData();
+      return {
+        success: true,
+        color: colorToSave,
+        message: `${colorToSave} Saved.`,
+      };
     }
-
-    await this.saveData();
-    return true;
+    return { success: false, message: 'Failed to add color.' };
   }
 
   // Remove a color from either saved colors or current project
   public async removeColor(
     color: string,
     from: 'saved' | 'project' = 'saved'
-  ): Promise<boolean> {
+  ): Promise<{ success: boolean; message?: string }> {
+    let removed = false;
     if (from === 'project' && this.currentProjectId) {
       const project = this.projects.find((p) => p.id === this.currentProjectId);
       if (project) {
+        const originalLength = project.colors.length;
         project.colors = project.colors.filter((c) => c !== color);
+        removed = project.colors.length !== originalLength;
       }
     } else {
+      const originalLength = this.savedColors.length;
       this.savedColors = this.savedColors.filter((c) => c !== color);
+      removed = this.savedColors.length !== originalLength;
     }
-
+    if (removed) {
+      await this.saveData();
+      return {
+        success: true,
+        message: `${color} removed from ${
+          from === 'project' ? 'Project' : 'Saved colors.'
+        }`,
+      };
+    }
     await this.saveData();
-    return true;
+    return { success: false, message: 'Color not found.' };
   }
 
   // Create a new project
@@ -125,7 +161,7 @@ export class ColorProjectManager {
   }
 
   public async deleteProject(projectId: string): Promise<boolean> {
-    console.log('deleteprjID>>', projectId);
+    // console.log('deleteprjID>>', projectId);
     const idx = this.projects.findIndex((p) => p.id === projectId);
     if (idx !== -1) {
       this.projects.splice(idx, 1);

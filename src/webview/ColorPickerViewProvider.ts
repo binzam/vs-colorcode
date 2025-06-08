@@ -37,19 +37,41 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
 
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      console.log('message>>', message);
+      // console.log('message>>', message);
       switch (message.command) {
         case 'ready':
           this.updateWebview();
           break;
         case 'addColor':
-          if (await this.manager.addColor(message.color, message.from)) {
+          const addResult = await this.manager.addColor(
+            message.color,
+            message.from
+          );
+          if (addResult.success) {
+            vscode.window.showInformationMessage(
+              addResult.message || 'Color added.'
+            );
             this.updateWebview();
+          } else {
+            vscode.window.showWarningMessage(
+              addResult.message || 'Failed to add color'
+            );
           }
           break;
         case 'removeColor':
-          if (await this.manager.removeColor(message.color, message.from)) {
+          const removeResult = await this.manager.removeColor(
+            message.color,
+            message.from
+          );
+          if (removeResult.success) {
+            vscode.window.showInformationMessage(
+              removeResult.message || 'Color removed.'
+            );
             this.updateWebview();
+          } else {
+            vscode.window.showWarningMessage(
+              removeResult.message || 'Failed to remove color.'
+            );
           }
           break;
         case 'copy':
@@ -142,7 +164,7 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
         </div>
         <div id="savedColorsView" class="view-content">
           <div class="color-input-bar">
-            <input class="color-input" type="text" id="savedColorsInput" placeholder="Enter color (hex, rgb, rgba, hsl)" />
+            <input class="color-input" type="text" id="savedColorsInput" placeholder="Enter color (hex, rgb, hsv, hsl)" />
             <button class="add-color-btn" id="addSavedColorBtn">+ Add Color</button>
           </div>
           <div id="savedColorsList"  class="color-listing"></div>
@@ -166,7 +188,7 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
         <div id="projectModal" class="project-modal">
           <div class="project-modal-content">
             <h3>Create New Project</h3>
-            <input type="text" id="projectNameInput" placeholder="Project name" />
+            <input class="new-project-input" type="text" id="projectNameInput" placeholder="Project name" />
             <div class="project-modal-actions">
               <button class="action-btn create-btn" id="createProjectBtn">Create</button>
               <button class="action-btn cancel-btn" id="cancelProjectBtn">Cancel</button>

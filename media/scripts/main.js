@@ -7,7 +7,7 @@ import { updateViews } from "./ui/viewManager.js";
 
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('main.js loaded');
+    // console.log('main.js loaded');
 
     window.currentState = {
       view: 'saved-colors',

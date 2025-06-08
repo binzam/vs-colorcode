@@ -38,8 +38,8 @@ export class ColorPreviewPanel {
     <div class="theme-row">
     <div class="theme-header">
     <div class="color-swatch-header" style="background: ${mainColor}"></div>
-    <p class="color-role" style="color: ${mainColor};" >
-    ${mainColor} as ${theme.role}
+    <p class="color-role" ><span class="role-color">${mainColor}</span>
+     as ${theme.role}
     </p>
     </div>
     <div class="theme-swatch-wrapper">
@@ -102,7 +102,6 @@ export class ColorPreviewPanel {
       <body>
          <div class="preview-header">
        <h2>Color theme suggestions</h2>
-      <p>These themes complement your color <strong><small>*${mainColor}*</small></strong> </p>
       <p>You can copy any of the color by hovering over them.</p>
       </div>
         <div class="theme-container"  id="themeContainer">

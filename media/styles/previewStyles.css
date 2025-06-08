@@ -35,7 +35,7 @@ body {
   padding: 30px;
   border-radius: 10px;
   background-color: #ffffff;
-  transition: background 0.3s ease;
+  transition: all 0.4s ease;
   position: relative;
 }
 .bg-control {
@@ -64,13 +64,22 @@ body {
 }
 .theme-row {
   width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 3px solid rgb(30, 30, 30, 0.5);
 }
 .theme-header {
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 5px;
   margin-bottom: 10px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #000000d5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-out;
 }
 .color-swatch-header {
   width: 40px;
@@ -83,6 +92,7 @@ body {
   font-weight: bold;
   font-size: 0.9rem;
 }
+
 .theme-swatch-wrapper {
   width: 100%;
   display: flex;
@@ -94,11 +104,7 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 5px;
-  margin-right: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  padding: 10px;
 }
 
 .swatch-label-wrapper {
@@ -109,9 +115,11 @@ body {
   padding: 5px;
   color: #ffffff;
   background-color: #000000d5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   cursor: pointer;
   position: relative;
+  transition: all 0.3s ease;
 }
 .swatch-overlay {
   position: absolute;
@@ -144,7 +152,7 @@ body {
   gap: 5px;
 }
 .color-code {
-  width:max-content;
+  width: max-content;
   font-size: 0.8rem;
 }
 
@@ -162,13 +170,8 @@ body {
   justify-content: space-between;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
-}
-
-.theme-card-main:hover {
-  transform: scale(1.02);
 }
 
 .theme-card-main h3 {
@@ -198,4 +201,57 @@ body {
 .theme-card-btn-label {
   padding: 5px 10px;
   border-radius: 4px;
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  .preview-header{
+    margin-bottom: 10px;
+  }
+  .theme-container {
+    padding: 30px 20px 20px;
+  }
+  .bg-control {
+    top: 5px;
+    right: 5px;
+    gap: 4px;
+    padding: 5px 8px;
+  }
+  .bg-control label {
+    font-size: 0.7rem;
+  }
+  .bg-control input[type='color'] {
+    width: 20px;
+    height: 20px;
+  }
+  .theme-swatch-wrapper {
+    flex-direction: column;
+  }
+  .color-swatch-container {
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px 5px;
+  }
+  .color-code {
+    display: none;
+  }
+  .theme-card-main {
+    min-height: 170px;
+  }
+  .theme-header {
+    margin-bottom: 0;
+  }
+}
+@media screen and (max-width: 450px) {
+  .role-color {
+    display: none;
+  }
+  .theme-container {
+    padding: 30px 10px 15px;
+    border-radius: 4px;
+  }
 }
