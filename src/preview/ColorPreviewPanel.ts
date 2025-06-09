@@ -1,19 +1,114 @@
 import * as vscode from 'vscode';
 import { Theme } from '../utils/types';
+import { fetchThemes } from '../utils/api';
 export class ColorPreviewPanel {
-  static show(mainColor: string, themes: Theme[], extensionUri: vscode.Uri) {
+  public static async show(color: string, extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       'colorPreview',
       `Theme Preview`,
       vscode.ViewColumn.One,
-      { enableScripts: true }
+      {
+        enableScripts: true,
+      }
     );
-    panel.webview.html = this.getHtml(
-      mainColor,
-      themes,
-      panel.webview,
-      extensionUri
+    panel.iconPath = vscode.Uri.joinPath(
+      extensionUri,
+      'media',
+      'icons',
+      'color-store-logo.png'
     );
+    panel.webview.html = this.getLoadingHtml();
+
+    try {
+      const { mainColor, themes } = await fetchThemes(color);
+
+      if (themes.length > 0) {
+        panel.webview.html = this.getHtml(
+          mainColor,
+          themes,
+          panel.webview,
+          extensionUri
+        );
+      } else {
+        vscode.window.showErrorMessage('Failed to load themes.');
+      }
+    } catch (error) {
+      vscode.window.showErrorMessage('Error loading themes.');
+    }
+  }
+  private static getLoadingHtml(): string {
+    return /*html*/ `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Loading Preview...</title>
+      <style>
+        
+body {
+  background-color: #1e1e1e;
+  padding: 20px;
+  font-family: sans-serif;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  transition: all 0.4s ease;
+  position: relative;
+  color: #1e1e1e;
+  animation: blink 1s infinite;
+}
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+@keyframes blink {
+  0% {
+    background-color: #ffffff;
+  }
+  50% {
+    background-color: #eeeeee;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+      </style>
+    </head>
+    <body>
+    <div class="loader-container">
+      <h2>Generating Theme Suggestions</h2>
+      <p>Please wait...</p>
+      <div class="loader"></div>
+      </div>
+    </body>
+    </html>
+  `;
   }
 
   private static getHtml(

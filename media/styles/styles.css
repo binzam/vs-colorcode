@@ -9,6 +9,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  scrollbar-width: thin;
 }
 body {
   font-family: 'Inter', sans-serif;
@@ -53,6 +54,7 @@ button {
   height: calc(100vh - 170px);
   overflow-y: auto;
   overflow-x: hidden;
+  padding-bottom: 20px;
 }
 .color-input-bar {
   width: 100%;

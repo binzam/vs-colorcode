@@ -1,39 +1,57 @@
-# colorcodestore README
+# Color Code Store VS Code Extension
 
-# extension.ts
+A powerful and modern Visual Studio Code extension for storing, organizing, and previewing color codes. Perfect for designers and developers who work with color palettes, themes, and need quick access to color utilities.
 
-- the entry point for a VS Code extension — it defines what happens when the extension is activated or deactivated.
+![Color Code Store Banner](media/icons/color-store-logo.png)
 
-## purpose
+---
 
-It wires up and registers:
+## Features
 
-- A Webview View Provider (the sidebar UI)
+- **Save & Organize Colors**: Store your favorite color codes (hex, rgb, hsl, etc.) for quick access.
+- **Project-Based Color Palettes**: Create projects and manage color palettes for each project separately.
+- **Copy Color Codes**: Instantly copy color codes in various formats (plain, CSS, Tailwind, etc.) to your clipboard.
+- **Remove Colors**: Easily remove colors from your saved list or project palettes.
+- **Color Preview**: Click "Preview" to see the color as both background and text in a dedicated editor tab.
+- **Theme Suggestions**: (If API enabled) Get theme suggestions and preview how your color looks in different UI roles.
+- **Modern UI**: Clean, responsive sidebar and modal dialogs, with support for VS Code themes.
 
-- A Command (colorcodestore.previewColor) to preview colors in a separate panel
+---
 
-# class ColorPickerViewProvider
+## Getting Started
 
-- a Visual Studio Code extension class responsible for rendering and managing a side panel (WebviewView) that acts as a color management UI. It's built using the VS Code Webview API and communicates with a backend manager (ColorProjectManager) to let users:
+### 1. Installation
+- Install from the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/) (search for `Color Code Store`).
+- Or, download the `.vsix` file and install via `Extensions: Install from VSIX...` in VS Code.
 
-## purpose
+### 2. Usage
+- Open the sidebar and click on the Color Code Store icon.
+- **Add a Color**: Enter a color code and click "Add Color".
+- **Create a Project**: Click "+ New Project" to organize colors by project.
+- **Copy/Preview/Remove**: Use the action buttons next to each color.
+- **Preview in Editor**: Click "Preview" to open a large preview in the main editor area.
+- **Theme Suggestions**: (If enabled) Preview how your color would look in different UI themes.
 
-- To provide an interactive color picker and manager as a sidebar view in VS Code where users can:
+---
 
-- Add/remove saved colors
+## Extension Settings
 
-- Create/select/delete projects
+This extension stores your colors and projects in VS Code's global settings. No external accounts required.
 
-- Assign colors to projects
+---
 
-- Preview, copy, and organize colors
+## Contributing
 
-# class ColorPreviewPanel
+Pull requests and suggestions are welcome! Please open an issue or PR on GitHub.
 
-- class that creates and displays a webview panel in VS Code to show a visual preview of a color the user selects. This is part of a Visual Studio Code extension.
+---
 
-# ColorProjectManager class
+## License
 
-- a Backend manager class for color data. backend utility/service for a Visual Studio Code extension that helps manage saved colors and color projects.
+[MIT](LICENSE)
 
-- It handles all data-related logic — including loading, saving, adding, removing, and organizing colors — and provides a bridge between persistent VS Code configuration storage and the webview-based frontend UI.
+---
+
+## Credits
+
+- Built with ❤️ for the VS Code community.

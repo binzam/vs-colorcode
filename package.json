@@ -1,12 +1,24 @@
 {
   "name": "colorcodestore",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binzam/vs-colorcode.git"
+  },
   "displayName": "colorcodestore",
   "description": "A color picker and manager for VS Code",
+  "publisher": "binyam",
   "version": "0.0.1",
+  "icon": "media/icons/color-store-logo.png",
+  "galleryBanner.color": {
+    "color": "#21314c",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.100.0"
   },
   "categories": [
+    "Themes",
+    "Visualization",
     "Other"
   ],
   "activationEvents": [],
@@ -40,7 +52,7 @@
         {
           "id": "colorcodestore-sidebar",
           "title": "Color Store",
-          "icon": "media/icons/color-store-icon.png"
+          "icon": "media/icons/color-store-icon-main.png"
         }
       ]
     },
@@ -50,7 +62,7 @@
           "id": "colorcodestore-view",
           "name": "Color Store",
           "type": "webview",
-          "icon": "media/icons/color-store-icon.png"
+          "icon": "media/icons/color-store-icon-main.png"
         }
       ]
     },
