@@ -11,14 +11,14 @@ export class ColorPreviewPanel {
         enableScripts: true,
       }
     );
+    panel.webview.html = this.getLoadingHtml(panel.webview, extensionUri);
     panel.iconPath = vscode.Uri.joinPath(
       extensionUri,
       'media',
       'icons',
       'color-store-logo.png'
     );
-    panel.webview.html = this.getLoadingHtml();
-
+    
     try {
       const { mainColor, themes } = await fetchThemes(color);
 
@@ -30,75 +30,37 @@ export class ColorPreviewPanel {
           extensionUri
         );
       } else {
+           panel.webview.html = this.getErrorHtml('No theme suggestions were returned.');
         vscode.window.showErrorMessage('Failed to load themes.');
       }
     } catch (error) {
+      panel.webview.html = this.getErrorHtml('Failed to load theme suggestions from the server.');
       vscode.window.showErrorMessage('Error loading themes.');
     }
   }
-  private static getLoadingHtml(): string {
+  private static getLoadingHtml(
+    webview: vscode.Webview,
+    extensionUri: vscode.Uri
+  ): string {
+    const stylePath = vscode.Uri.joinPath(
+      extensionUri,
+      'media',
+      'styles',
+      'loadingStyles.css'
+    );
+    const styleUri = webview.asWebviewUri(stylePath);
     return /*html*/ `
     <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
       <title>Loading Preview...</title>
-      <style>
-        
-body {
-  background-color: #1e1e1e;
-  padding: 20px;
-  font-family: sans-serif;
-  text-align: center;
-  height: 100vh;
-  display: flex;
+         <link href="${styleUri}" rel="stylesheet">
+          <style>
+          body {  display: flex;
   align-items: center;
-  justify-content: center;
-}
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  max-width: 600px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  transition: all 0.4s ease;
-  position: relative;
-  color: #1e1e1e;
-  animation: blink 1s infinite;
-}
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
-@keyframes blink {
-  0% {
-    background-color: #ffffff;
-  }
-  50% {
-    background-color: #eeeeee;
-  }
-  100% {
-    background-color: #ffffff;
-  }
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-      </style>
+  justify-content: center; }
+        </style>
     </head>
     <body>
     <div class="loader-container">
@@ -110,6 +72,43 @@ body {
     </html>
   `;
   }
+private static getErrorHtml(message: string): string {
+  return /*html*/ `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Error Loading Themes</title>
+      <style>
+        body {
+          font-family: sans-serif;
+          background-color: var(--vscode-editor-background, #1e1e1e);
+          color: var(--vscode-editor-foreground, #cccccc);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          text-align: center;
+        }
+        .error-container {
+          max-width: 600px;
+          padding: 2rem;
+        }
+        h2 {
+          color: var(--vscode-editorError-foreground, red);
+        }
+      </style>
+    </head>
+    <body>
+      <div class="error-container">
+        <h2>Oops! Something went wrong.</h2>
+        <p>${message}</p>
+        <p>Please try again or check your internet connection.</p>
+      </div>
+    </body>
+    </html>
+  `;
+}
 
   private static getHtml(
     mainColor: string,
@@ -122,6 +121,9 @@ body {
       'media',
       'styles',
       'previewStyles.css'
+    );
+    const fontUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, 'media', 'fonts', 'Inter-Regular.woff2')
     );
     const styleUri = webview.asWebviewUri(stylePath);
     const scriptUri = webview.asWebviewUri(
@@ -193,6 +195,16 @@ body {
         <meta charset="UTF-8">
         <title>Theme Preview</title>
               <link href="${styleUri}" rel="stylesheet">
+              <style>
+          @font-face {
+            font-family: 'Inter';
+            src: url('${fontUri}') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+          }
+          body { font-family: 'Inter', sans-serif; }
+        </style>
       </head>
       <body>
          <div class="preview-header">

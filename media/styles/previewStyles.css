@@ -14,8 +14,8 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #1e1e1e;
-  color: white;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
   padding: 20px;
 }
 .preview-header {
@@ -36,7 +36,9 @@ body {
   margin: auto;
   padding: 30px;
   border-radius: 10px;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  background-color: var(--vscode-sideBar-background);
+  border: 1px solid var(--vscode-editorWidget-border);
   transition: all 0.4s ease;
   position: relative;
 }
@@ -78,16 +80,20 @@ body {
   margin-bottom: 10px;
   padding: 5px 20px;
   border-radius: 5px;
-  color: #ffffff;
-  background-color: #000000d5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  /* color: #ffffff; */
+  /* background-color: #000000d5; */
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); */
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-badge-background);
+  box-shadow: 0 2px 6px var(--vscode-widget-shadow);
+
   transition: all 0.3s ease-out;
 }
 .color-swatch-header {
   width: 40px;
   height: 25px;
   border-radius: 5px;
-  border: 2px solid #000000;
+  border: 2px solid var(--vscode-editor-background);
 }
 .color-role {
   text-transform: uppercase;
@@ -115,9 +121,12 @@ body {
   justify-content: space-between;
   gap: 5px;
   padding: 5px;
-  color: #ffffff;
-  background-color: #000000d5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  /* color: #ffffff; */
+  /* background-color: #000000d5; */
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); */
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-badge-background);
+  box-shadow: 0 2px 6px var(--vscode-widget-shadow);
   border-radius: 5px;
   cursor: pointer;
   position: relative;
@@ -162,7 +171,7 @@ body {
   width: 25px;
   height: 100%;
   border-radius: 5px;
-  border: 2px solid rgb(0, 0, 0);
+  border: 2px solid var(--vscode-editor-background);
 }
 
 .theme-card-main {
@@ -209,7 +218,7 @@ body {
   body {
     padding: 10px;
   }
-  .preview-header{
+  .preview-header {
     margin-bottom: 10px;
   }
   .theme-container {

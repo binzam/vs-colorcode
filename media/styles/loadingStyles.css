@@ -1,0 +1,61 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  padding: 20px;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: var(--vscode-editor-background);
+  transition: all 0.4s ease;
+  position: relative;
+  color: var(--vscode-editor-foreground);
+  animation: blink 2s infinite;
+}
+.loader {
+  border: 4px solid var(--vscode-editorWidget-border, #ccc);
+  border-top: 4px solid var(--vscode-progressBar-background, #3794ff);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+@keyframes blink {
+  0% {
+    background-color: var(--vscode-editor-background);
+  }
+  50% {
+    background-color: var(--vscode-editor-hoverHighlightBackground);
+  }
+  100% {
+    background-color: var(--vscode-editor-background);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

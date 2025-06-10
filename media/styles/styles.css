@@ -13,15 +13,13 @@
 }
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #1e1e1e;
-  /* background-color: #1f1f1f8c; */
-  color: white;
-  overflow: hidden;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
   padding: 10px;
   position: relative;
 }
 button {
-  color: white;
+  color: var(--vscode-button-foreground);
   border: none;
   cursor: pointer;
   font-size: 10px;
@@ -46,18 +44,26 @@ button {
 }
 
 .view-content {
-  /* display: none; */
+  display: none;
   padding: 10px;
 }
 .project-listing,
 .color-listing {
   height: calc(100vh - 170px);
   overflow-y: auto;
+  max-width: 500px;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+}
+.project-color-listing {
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+  max-width: 500px;
   overflow-x: hidden;
   padding-bottom: 20px;
 }
 .color-input-bar {
-  width: 100%;
+  max-width: 500px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -67,39 +73,41 @@ button {
 input.color-input {
   flex: 1;
   width: 100%;
-  max-width: 500px;
-  border: none;
   background-color: #eee;
   border: 1px solid #005fa3;
-  border-radius: 3px;
+  border-radius: 5px;
   outline: none;
   padding: 5px 10px;
-  font-size: 12px;
   row-gap: 10px;
   height: 30px;
 }
 input.color-input:focus {
-  outline: 2px solid #007acc;
-  outline-offset: 2px;
-  border: 1px dotted #ffffff;
+  outline: none;
+  border: 1px solid #0090f1;
 }
 .add-color-btn {
   padding: 5px 10px;
-  background-color: #005fa3;
+  background: var(--vscode-button-background);
   height: 30px;
   font-size: 12px;
+  border-radius: 5px;
 }
 .add-color-btn:hover {
-  background-color: #007acc;
+  background: var(--vscode-button-hoverBackground);
 }
 .new-prj-btn {
   padding: 5px 10px;
-  background-color: #005fa3;
   width: 100%;
+  background: var(--vscode-button-background);
+  max-width: 500px;
   margin: 5px 0;
   font-size: 14px;
   font-weight: bold;
   text-align: center;
+  border-radius: 5px;
+}
+.new-prj-btn:hover {
+  background: var(--vscode-button-hoverBackground);
 }
 .action-btn {
   padding: 5px 10px;
@@ -180,23 +188,26 @@ input.color-input:focus {
 }
 .create-btn {
   background: green;
+  font-size: 14px;
 }
 .cancel-btn {
+  font-size: 14px;
   background-color: red;
 }
 /* from main.js  */
 /* color item/bar*/
 .color-item {
+  width: 100%;
   max-width: 500px;
-  margin: 5px 0;
+  margin: 5px 0 10px;
   padding: 10px 5px;
-  background: #ffffff;
   border-radius: 3px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 5px;
   position: relative;
+  border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
 }
 
 .color-code {
@@ -221,6 +232,7 @@ input.color-input:focus {
 }
 
 .copy-options {
+  font-family: 'Inter', sans-serif;
   position: absolute;
   right: 0;
   top: 100%;
@@ -237,6 +249,7 @@ input.color-input:focus {
 }
 
 .copy-option {
+  font-family: 'Inter', sans-serif;
   padding: 4px;
   cursor: pointer;
   border: none;
@@ -258,8 +271,8 @@ input.color-input:focus {
 /* pproject listing  */
 .back-to-projects-btn {
   font-size: 12px;
-  padding: 5px 12px;
-  background-color: #005fa3;
+  padding: 3px 5px;
+  background: var(--vscode-button-background);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -269,17 +282,18 @@ input.color-input:focus {
   transition: all 0.3s ease;
 }
 .back-to-projects-btn:hover {
-  color: #005fa3;
+  background: var(--vscode-button-hoverBackground);
   background-color: #1e1e1e;
 }
 .project-title {
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--vscode-editor-foreground);
   font-weight: bold;
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid var(--vscode-editorWidget-border);
   margin: 15px 0;
-  padding: 2px 5px 5px;
+  padding: 2px 2px 5px;
   font-size: 16px;
+  overflow: hidden;
 }
 .project-item {
   display: flex;
@@ -352,7 +366,7 @@ input.color-input:focus {
   }
   .back-to-projects-btn {
     font-size: 10px;
-    padding: 3px 8px;
+    padding: 3px 5px;
     gap: 2px;
     border-radius: 2px;
   }
@@ -371,6 +385,7 @@ input.color-input:focus {
 
   .view-content {
     padding: 10px 0;
+    overflow-x: hidden;
   }
   .color-input-bar {
     flex-direction: column;
@@ -406,7 +421,6 @@ input.color-input:focus {
   }
   .copy-option {
     padding: 3px 2px;
-    font-size: 11px;
     margin: 2px 0;
   }
   .preview-btn {

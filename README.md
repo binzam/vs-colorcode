@@ -1,8 +1,8 @@
-# Color Code Store VS Code Extension
+# Color Store | VS Code Extension
 
-A powerful and modern Visual Studio Code extension for storing, organizing, and previewing color codes. Perfect for designers and developers who work with color palettes, themes, and need quick access to color utilities.
+A powerful and modern Visual Studio Code extension for storing, organizing, and previewing color codes. Perfect for **Frontend Developers** and **designers** who work with color palettes, themes, and need quick access to color utilities.
 
-![Color Code Store Banner](media/icons/color-store-logo.png)
+![Color Store Banner](media/icons/color-store-logo.png)
 
 ---
 
@@ -21,11 +21,11 @@ A powerful and modern Visual Studio Code extension for storing, organizing, and 
 ## Getting Started
 
 ### 1. Installation
-- Install from the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/) (search for `Color Code Store`).
+- Install from the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/) (search for `Color Store`).
 - Or, download the `.vsix` file and install via `Extensions: Install from VSIX...` in VS Code.
 
 ### 2. Usage
-- Open the sidebar and click on the Color Code Store icon.
+- Open the sidebar and click on the Color Store icon.
 - **Add a Color**: Enter a color code and click "Add Color".
 - **Create a Project**: Click "+ New Project" to organize colors by project.
 - **Copy/Preview/Remove**: Use the action buttons next to each color.
@@ -37,12 +37,6 @@ A powerful and modern Visual Studio Code extension for storing, organizing, and 
 ## Extension Settings
 
 This extension stores your colors and projects in VS Code's global settings. No external accounts required.
-
----
-
-## Contributing
-
-Pull requests and suggestions are welcome! Please open an issue or PR on GitHub.
 
 ---
 

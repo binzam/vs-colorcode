@@ -24,7 +24,7 @@ export class ColorProjectManager {
     }
   }
   private async loadData() {
-    const config = vscode.workspace.getConfiguration('colorcodestore');
+    const config = vscode.workspace.getConfiguration('color-store');
     // Use Promise.all for parallel loading
     const [savedColors, projects, currentProjectId] = await Promise.all([
       config.get<string[]>('savedColors'),
@@ -44,7 +44,7 @@ export class ColorProjectManager {
   }
 
   private async saveData() {
-    const config = vscode.workspace.getConfiguration('colorcodestore');
+    const config = vscode.workspace.getConfiguration('color-store');
     await config.update(
       'savedColors',
       this.savedColors,

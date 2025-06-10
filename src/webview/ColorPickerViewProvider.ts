@@ -80,7 +80,7 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           break;
         case 'previewColor':
           vscode.commands.executeCommand(
-            'colorcodestore.previewColor',
+            'color-store.previewColor',
             message.color
           );
           break;
@@ -174,16 +174,16 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           <div id="projectsList" class="project-listing"></div>
         </div>
         <div id="projectColorsView" class="view-content">
-        <button id="backToProjectsBtn" class="back-to-projects-btn"><div><svg  width="12" height="12"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <button id="backToProjectsBtn" class="back-to-projects-btn"><svg  width="12" height="12"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
 </svg>
-</div>All Projects</button>
+Back</button>
           <h3 id="projectColorsTitle" class="project-title"></h3>
           <div class="color-input-bar">
             <input class="color-input" type="text" id="projectColorInput" placeholder="Enter color (hex, rgb, rgba, hsl)" />
             <button class="add-color-btn" id="addProjectColorBtn">Add Color</button>
           </div>
-          <div id="projectColorsList" class="color-listing"></div>
+          <div id="projectColorsList" class="project-color-listing"></div>
         </div>
         <div id="projectModal" class="project-modal">
           <div class="project-modal-content">
