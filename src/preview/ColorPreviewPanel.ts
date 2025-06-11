@@ -1,41 +1,45 @@
 import * as vscode from 'vscode';
-import { Theme } from '../utils/types';
-import { fetchThemes } from '../utils/api';
+import { getFormattedShades } from '../utils/colorUtils';
+
 export class ColorPreviewPanel {
   public static async show(color: string, extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       'colorPreview',
-      `Theme Preview`,
+      `Color Preview`,
       vscode.ViewColumn.One,
       {
         enableScripts: true,
       }
     );
-    panel.webview.html = this.getLoadingHtml(panel.webview, extensionUri);
     panel.iconPath = vscode.Uri.joinPath(
       extensionUri,
       'media',
       'icons',
       'color-store-logo.png'
     );
-    
+    panel.webview.html = this.getLoadingHtml(panel.webview, extensionUri);
     try {
-      const { mainColor, themes } = await fetchThemes(color);
-
-      if (themes.length > 0) {
+      const delay = new Promise((res) => setTimeout(res, 500));
+      const shadePromise = getFormattedShades(color);
+      const [{ shades }] = await Promise.all([shadePromise, delay]);
+      if (shades) {
         panel.webview.html = this.getHtml(
-          mainColor,
-          themes,
+          color,
+          shades,
           panel.webview,
           extensionUri
         );
       } else {
-           panel.webview.html = this.getErrorHtml('No theme suggestions were returned.');
-        vscode.window.showErrorMessage('Failed to load themes.');
+        panel.webview.html = this.getErrorHtml(
+          'Failed to generate color shades.'
+        );
+        vscode.window.showErrorMessage('Failed to generate color shades.');
       }
     } catch (error) {
-      panel.webview.html = this.getErrorHtml('Failed to load theme suggestions from the server.');
-      vscode.window.showErrorMessage('Error loading themes.');
+      panel.webview.html = this.getErrorHtml(
+        'Unexpected error. Please Try again.'
+      );
+      vscode.window.showErrorMessage('Unexpected error. Please Try again.');
     }
   }
   private static getLoadingHtml(
@@ -64,7 +68,7 @@ export class ColorPreviewPanel {
     </head>
     <body>
     <div class="loader-container">
-      <h2>Generating Theme Suggestions</h2>
+      <h2>Loading Color Preview</h2>
       <p>Please wait...</p>
       <div class="loader"></div>
       </div>
@@ -72,8 +76,8 @@ export class ColorPreviewPanel {
     </html>
   `;
   }
-private static getErrorHtml(message: string): string {
-  return /*html*/ `
+  private static getErrorHtml(message: string): string {
+    return /*html*/ `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -92,7 +96,6 @@ private static getErrorHtml(message: string): string {
         }
         .error-container {
           max-width: 600px;
-          padding: 2rem;
         }
         h2 {
           color: var(--vscode-editorError-foreground, red);
@@ -108,11 +111,11 @@ private static getErrorHtml(message: string): string {
     </body>
     </html>
   `;
-}
+  }
 
   private static getHtml(
     mainColor: string,
-    themes: Theme[],
+    shades: { key: string; value: string }[],
     webview: vscode.Webview,
     extensionUri: vscode.Uri
   ): string {
@@ -129,65 +132,19 @@ private static getErrorHtml(message: string): string {
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(extensionUri, 'media', 'scripts', 'preview.js')
     );
-    const themeHtml = themes
+    const shadesDisplay = shades
       .map(
-        (theme) => /*html*/ `
-    <div class="theme-row">
-    <div class="theme-header">
-    <div class="color-swatch-header" style="background: ${mainColor}"></div>
-    <p class="color-role" ><span class="role-color">${mainColor}</span>
-     as ${theme.role}
-    </p>
-    </div>
-    <div class="theme-swatch-wrapper">
-    <div class="color-swatch-container">
-
-            <div class="swatch-label-wrapper"  data-color="${theme.background}">
-            <div class="code-swatch-col">
-            <span class="color-label">Bg</span>
-            <p class="color-code">${theme.background}</p>
-            </div>
-            <div class="color-swatch" style="background: ${theme.background}"></div>
-            <div class="swatch-overlay"></div>
-            </div>
-
-            <div class="swatch-label-wrapper"  data-color="${theme.text}">
-            <div class="code-swatch-col">
-            <span class="color-label">Text</span>
-            <p class="color-code">${theme.text}</p>
-            </div>
-            <div class="color-swatch" style="background: ${theme.text}"></div>
-            <div class="swatch-overlay"></div>
-
-            </div>
-
-            <div class="swatch-label-wrapper"  data-color="${theme.accent}">
-            <div class="code-swatch-col">
-            <span class="color-label">Accent</span>
-            <p class="color-code">${theme.accent}</p>
-            </div>
-            <div class="color-swatch" style="background: ${theme.accent}"></div>
-            <div class="swatch-overlay"></div>
-
-            </div>         
-            
-        </div>
-    <div class="theme-card-main" style="background: ${theme.background}; color: ${theme.text}">
-        <h3>${theme.name}</h3>
-        <p>${theme.description}</p>
-        <button class="theme-card-btn" style="background: ${theme.accent};">
-        
-        <span class="theme-card-btn-label"  style="background: ${theme.background}; color: ${theme.text}"></span> 
-        
-        </button>
-        
-    </div>
-    </div>
-    </div>
-  `
+        (shade) => /*html*/ `
+  <div class="shade-box" style="background: ${shade.value}" data-color="${shade.value}">
+    <span class="shade-value">${shade.value}</span>
+  </div>`
       )
       .join('');
-
+    const mainColorBlock = /*html*/ `
+  <div class="main-color-block" style="background: ${mainColor};">
+    <span class="main-color-value">${mainColor}</span>
+  </div>
+`;
     return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
@@ -204,20 +161,22 @@ private static getErrorHtml(message: string): string {
             font-display: swap;
           }
           body { font-family: 'Inter', sans-serif; }
+          
+          
         </style>
       </head>
       <body>
          <div class="preview-header">
-       <h2>Color theme suggestions</h2>
-      <p>You can copy any of the color by hovering over them.</p>
+       <h2>Color Preview</h2>
+      <p>You can copy any shade of color by hovering over.</p>
       </div>
-        <div class="theme-container"  id="themeContainer">
-           <div class="bg-control">
-        <label for="bg-picker">Change background</label>
-        <input type="color" id="bg-picker" value="#ffffff" title="Choose background color">
+      <div class="shades-container">
+      
+      ${mainColorBlock}
+      <div class="shades-grid">
+      ${shadesDisplay}
       </div>
-        ${themeHtml}</div>
-        
+      </div>
         <script type="module" src="${scriptUri}"></script>
 
       </body>

@@ -14,9 +14,8 @@ export function renderColorsList(container, colors, type) {
               <button class="copy-option" data-format="css-color">color: ${color};</button>
               <button class="copy-option" data-format="css-bg">background-color: ${color};</button>
             </div>
-            ${window.serverReady ? `
+            
   <button class="preview-btn" data-color="${color}">👁️</button>
-` : ''}
             <button class="remove-btn" data-color="${color}" data-type="${type}">🗑️</button>
           </div>
         </div>`;

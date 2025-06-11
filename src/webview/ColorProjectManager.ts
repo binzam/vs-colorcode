@@ -7,9 +7,21 @@ export class ColorProjectManager {
   private projects: ColorProject[] = [];
   private currentProjectId: string | null = null;
   private initialized: boolean = false;
+  private globalState: vscode.Memento;
+  constructor(globalState: vscode.Memento) {
+    this.globalState = globalState;
+  }
   public async initialize(): Promise<void> {
     if (!this.initialized) {
       try {
+        const isSeeded = this.globalState.get<boolean>(
+          'colorStore.initialized'
+        );
+
+        if (!isSeeded) {
+          await this.seedDefaultColors();
+          await this.globalState.update('colorStore.initialized', true);
+        }
         await this.loadData();
         this.initialized = true;
       } catch (error) {
@@ -23,6 +35,24 @@ export class ColorProjectManager {
       }
     }
   }
+  private async seedDefaultColors() {
+    await this.loadData();
+    if (this.savedColors.length > 0) {
+      return;
+    }
+    const defaultColors = [
+      '#FF5733',
+      '#33C1FF',
+      '#28A745',
+      '#FFC107',
+      '#6F42C1',
+    ];
+
+    for (const color of defaultColors) {
+      await this.addColor(color, 'saved');
+    }
+  }
+
   private async loadData() {
     const config = vscode.workspace.getConfiguration('color-store');
     // Use Promise.all for parallel loading
@@ -133,13 +163,12 @@ export class ColorProjectManager {
         }`,
       };
     }
-    await this.saveData();
     return { success: false, message: 'Color not found.' };
   }
 
   // Create a new project
   public async createProject(name: string): Promise<boolean> {
-    if (!name) {
+    if (!name || name.trim() === '') {
       return false;
     }
 
@@ -168,7 +197,7 @@ export class ColorProjectManager {
       if (this.currentProjectId === projectId) {
         this.currentProjectId = null;
       }
-      this.saveData();
+      await this.saveData();
       return true;
     }
     return false;

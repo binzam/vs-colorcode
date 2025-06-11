@@ -7,8 +7,11 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
   private currentView: 'saved-colors' | 'projects' | 'project-colors' =
     'saved-colors';
   private _disposables: vscode.Disposable[] = [];
-  constructor(private readonly extensionUri: vscode.Uri) {
-    this.manager = new ColorProjectManager();
+  constructor(
+    private readonly extensionUri: vscode.Uri,
+    private readonly globalState: vscode.Memento
+  ) {
+    this.manager = new ColorProjectManager(globalState);
     this.initializeManager();
   }
   private async initializeManager(): Promise<void> {

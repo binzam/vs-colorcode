@@ -3,12 +3,12 @@ import { ColorPreviewPanel } from './preview/ColorPreviewPanel';
 import { ColorPickerViewProvider } from './webview/ColorPickerViewProvider';
 
 export function activate(context: vscode.ExtensionContext) {
-  const provider = new ColorPickerViewProvider(context.extensionUri);
+  const provider = new ColorPickerViewProvider(context.extensionUri, context.globalState);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('color-store-view', provider, {
       webviewOptions: {
         retainContextWhenHidden: true,
-      },
+      }, 
     })
   );
 
