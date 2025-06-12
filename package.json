@@ -37,7 +37,7 @@
         },
         "color-store.currentProjectId": {
           "type": "string",
-          "default": null,
+          "default": "",
           "description": "Current active project ID"
         }
       }
@@ -47,7 +47,7 @@
         {
           "id": "color-store",
           "title": "Color Store",
-          "icon": "media/icons/color-store-icon.png"
+          "icon": "media/icons/icon.svg"
         }
       ]
     },
@@ -57,7 +57,7 @@
           "id": "color-store-view",
           "name": "Color Store",
           "type": "webview",
-          "icon": "media/icons/color-store-icon.png"
+          "icon": "media/icons/icon.svg"
         }
       ]
     },
@@ -66,11 +66,6 @@
         "command": "color-store.previewColor",
         "title": "Preview Color",
         "category": "Color Store"
-      },
-      {
-        "command": "color-store.addColor",
-        "title": "Add Color",
-        "category": "Color Code Store"
       },
       {
         "command": "color-store.createProject",

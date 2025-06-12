@@ -13,10 +13,10 @@
 }
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--vscode-editor-background);
+  background: var(--vscode-editor-background);
   color: var(--vscode-editor-foreground);
   padding: 10px;
-  position: relative;
+  position: relative; 
 }
 button {
   color: var(--vscode-button-foreground);

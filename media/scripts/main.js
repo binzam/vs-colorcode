@@ -8,7 +8,7 @@ import { updateViews } from './ui/viewManager.js';
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     console.log('main.js loaded');
-
+    document.body.classList.add('fade-in');
     window.currentState = {
       view: 'saved-colors',
       savedColors: [],
@@ -16,8 +16,8 @@ import { updateViews } from './ui/viewManager.js';
       currentProject: null,
     };
     window.vscode = acquireVsCodeApi();
+    vscode.postMessage({ command: 'mainReady' });
 
-    vscode.postMessage({ command: 'ready' });
     initNavigation();
     initSavedColors();
     initProjects();

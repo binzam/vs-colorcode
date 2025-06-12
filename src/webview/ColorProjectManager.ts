@@ -5,7 +5,7 @@ import { isValidColor } from '../utils/colorUtils';
 export class ColorProjectManager {
   private savedColors: string[] = [];
   private projects: ColorProject[] = [];
-  private currentProjectId: string | null = null;
+  private currentProjectId: string = '';
   private initialized: boolean = false;
   private globalState: vscode.Memento;
   constructor(globalState: vscode.Memento) {
@@ -30,7 +30,7 @@ export class ColorProjectManager {
         );
         this.savedColors = [];
         this.projects = [];
-        this.currentProjectId = null;
+        this.currentProjectId = '';
         this.initialized = true;
       }
     }
@@ -40,6 +40,7 @@ export class ColorProjectManager {
     if (this.savedColors.length > 0) {
       return;
     }
+
     const defaultColors = [
       '#FF5733',
       '#33C1FF',
@@ -48,9 +49,21 @@ export class ColorProjectManager {
       '#6F42C1',
     ];
 
+    const addedColors: string[] = [];
+
     for (const color of defaultColors) {
-      await this.addColor(color, 'saved');
+      const { isValid, acceptableColor } = isValidColor(color);
+      if (
+        isValid &&
+        acceptableColor &&
+        !this.savedColors.includes(acceptableColor)
+      ) {
+        this.savedColors.unshift(acceptableColor);
+        addedColors.push(acceptableColor);
+      }
     }
+
+    await this.saveData();
   }
 
   private async loadData() {
@@ -59,7 +72,7 @@ export class ColorProjectManager {
     const [savedColors, projects, currentProjectId] = await Promise.all([
       config.get<string[]>('savedColors'),
       config.get<ColorProject[]>('projects'),
-      config.get<string | null>('currentProjectId'),
+      config.get<string>('currentProjectId'),
     ]);
     // Clean the loaded data
     this.savedColors = (savedColors || []).filter(
@@ -71,6 +84,8 @@ export class ColorProjectManager {
         (c) => c !== null && c.trim() !== ''
       ),
     }));
+    this.currentProjectId =
+      typeof currentProjectId === 'string' ? currentProjectId : '';
   }
 
   private async saveData() {
@@ -190,12 +205,11 @@ export class ColorProjectManager {
   }
 
   public async deleteProject(projectId: string): Promise<boolean> {
-    // console.log('deleteprjID>>', projectId);
     const idx = this.projects.findIndex((p) => p.id === projectId);
     if (idx !== -1) {
       this.projects.splice(idx, 1);
       if (this.currentProjectId === projectId) {
-        this.currentProjectId = null;
+        this.currentProjectId = '';
       }
       await this.saveData();
       return true;
@@ -211,9 +225,9 @@ export class ColorProjectManager {
   }
 
   getCurrentProject() {
-    const currentProject = this.currentProjectId
-      ? this.projects.find((p) => p.id === this.currentProjectId)
-      : null;
+    const currentProject = this.projects.find(
+      (p) => p.id === this.currentProjectId
+    );
     return currentProject
       ? {
           id: currentProject.id,

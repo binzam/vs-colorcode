@@ -7,6 +7,8 @@ export function initNavigation() {
       item.classList.add('active');
 
       const view = item.dataset.view;
+      window.currentState.view = view;
+      document.dispatchEvent(new Event('stateUpdated'));
       vscode.postMessage({ command: 'switchView', view });
     });
   });

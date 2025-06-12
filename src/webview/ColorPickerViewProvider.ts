@@ -17,7 +17,6 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
   private async initializeManager(): Promise<void> {
     try {
       await this.manager.initialize();
-      // If we have a view already (unlikely but possible), update it
       if (this._view) {
         this.updateWebview();
       }
@@ -37,12 +36,16 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
     };
-    webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
+    webviewView.webview.html = this.getLoadingHtml(webviewView.webview);
 
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      // console.log('message>>', message);
       switch (message.command) {
         case 'ready':
+          webviewView.webview.html = this.getHtmlForWebview(
+            webviewView.webview
+          );
+          break;
+        case 'mainReady':
           this.updateWebview();
           break;
         case 'addColor':
@@ -89,6 +92,9 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           break;
         case 'switchView':
           this.currentView = message.view;
+          if (message.view === 'saved-colors' || message.view === 'projects') {
+            this.manager.selectProject(''); 
+          }
           this.updateWebview();
           break;
         case 'createProject':
@@ -104,7 +110,6 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
           break;
         case 'deleteProject':
           if (await this.manager.deleteProject(message.projectId)) {
-            // should the currentview change to 'projects' or 'saved-colors' ? its optional
             this.currentView = 'projects';
             this.updateWebview();
           }
@@ -124,6 +129,107 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
       projects: this.manager.getProjects(),
       currentProject: this.manager.getCurrentProject(),
     });
+  }
+  private getLoadingHtml(webview: vscode.Webview): string {
+    const fontUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this.extensionUri,
+        'media',
+        'fonts',
+        'Inter-Regular.woff2'
+      )
+    );
+    const loadingScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.extensionUri, 'media', 'scripts', 'loader.js')
+    );
+    return /*html*/ `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style>
+        @font-face {
+          font-family: 'Inter';
+          src: url('${fontUri}') format('woff2');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
+        }
+        body {
+          font-family: 'Inter', sans-serif;
+          margin: 0;
+          background-color: var(--vscode-sideBar-background);
+            color: var(--vscode-foreground);
+          padding: 10px;          
+          text-align:center;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        .loading-header,
+        .loading-bar-container{
+          width: 100%;
+          max-width: 500px;
+        }
+      
+        .loading-bar-container{
+           display: flex;
+          flex-direction: column;
+           gap: 5px;
+        }
+        .loading-bar {
+          width: 100%;
+          height: 55px;
+          background-color: var(--vscode-editorWidget-background);
+          border: 1px solid var(--vscode-sideBarSectionHeader-border);
+          border-radius: 4px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .loading-bar::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -50%;
+          width: 50%;
+          height: 100%;
+            background: linear-gradient(
+    to right,
+    transparent,
+    var(--vscode-editor-hoverHighlightBackground, rgba(255,255,255,0.2)),
+    transparent
+  );
+          animation: shimmer 1.2s infinite;
+        }
+
+        @keyframes shimmer {
+          100% {
+            left: 100%;
+          }
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      </style>
+    </head>
+    <body>
+    
+    <div class="loading-header">
+    <p>Welcome to Color Store!</p>
+      </div>
+     
+ <div class="loading-bar-container">
+ <div class="loading-bar"></div>
+      <div class="loading-bar"></div>
+      <div class="loading-bar"></div>
+ 
+ </div>
+             <script type="module" src="${loadingScriptUri}"></script>
+    </body>
+    </html>
+  `;
   }
 
   private getHtmlForWebview(webview: vscode.Webview): string {
@@ -156,7 +262,13 @@ export class ColorPickerViewProvider implements vscode.WebviewViewProvider {
             font-style: normal;
             font-display: swap;
           }
-          body { font-family: 'Inter', sans-serif; }
+          body { font-family: 'Inter', sans-serif; 
+            opacity: 0;
+           transition: opacity 0.3s ease-in-out;
+          }
+          body.fade-in {
+            opacity: 1;
+          }
         </style>
         <link href="${cssUri}" rel="stylesheet" />
       </head>

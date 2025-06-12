@@ -6,7 +6,7 @@ export function renderColorsList(container, colors, type) {
           return /*html*/ `<div class="color-item" style="background:${color}">
           <span class="color-code">${color}</span>
           <div class="color-actions">
-            <button class="copy-btn" data-color="${color}" data-options-id="${id}">📋</button>
+            <button class="copy-btn" title="Copy"  data-color="${color}" data-options-id="${id}">📋</button>
             <div id="${id}" class="copy-options">
               <button class="copy-option" data-format="plain">${color}</button>
               <button class="copy-option" data-format="tailwind-bg">bg-[${color}]</button>
@@ -15,7 +15,7 @@ export function renderColorsList(container, colors, type) {
               <button class="copy-option" data-format="css-bg">background-color: ${color};</button>
             </div>
             
-  <button class="preview-btn" data-color="${color}">👁️</button>
+  <button class="preview-btn" title="Preview" data-color="${color}">👁️</button>
             <button class="remove-btn" data-color="${color}" data-type="${type}">🗑️</button>
           </div>
         </div>`;
