@@ -1,21 +1,32 @@
 # 🎨 Color Store — VS Code Extension
 
-**Color Store** is your all-in-one color management tool, built right into Visual Studio Code. Effortlessly save, preview, organize, and copy color palettes—perfect for frontend developers, designers, and anyone who works with color!
+## 📚 Table of Contents
+
+- [Why Use Color Store?](#why-use-color-store)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Extension Settings](#extension-settings)
+- [Feedback & Contributions](#feedback--contributions)
+- [License](#license)
+- [Credits](#credits)
+
+**Color Store** is your all-in-one color management tool for VS Code. Effortlessly save, preview, organize, and copy color palettes—perfect for frontend developers, designers, and anyone working with color.
 
 ---
 
-## 🚀 Why Color Store?
+![Save Your Colors](media/gifs/save-colors.gif)
 
-- **Supercharge Your Workflow:** Instantly save, organize, and access your favorite colors without leaving VS Code.
-- **Project-Based Palettes:** Keep your color schemes organized by project—no more messy lists!
-- **Copy in Any Format:** One click to copy colors as plain text, CSS, or Tailwind classes—ready for any stack.
+## Why Use Color Store?
+
+- **Boost Your Productivity:** Instantly save, organize, and access your favorite colors without digging through your files or leaving VS Code.
+- **Project-Based Palettes:** Keep your color schemes organized by project—no more cluttered lists!
+- **Copy in Any Format:** Copy colors as plain text, CSS, or Tailwind classes with a single click.
 - **Live Color Preview:** Instantly preview any color and its beautiful shades in a dedicated editor tab.
 - **Modern, Responsive UI:** Enjoy a clean, theme-aware sidebar and modal dialogs that blend seamlessly with your VS Code setup.
-- **No Accounts Needed:** All your colors are stored securely in your VS Code settings—no cloud, no sign-up.
 
 ---
 
-## ✨ Features
+## Features
 
 - **Save & Organize Colors:** Store your favorite color codes (hex, rgb, hsl, etc.) for quick access.
 - **Project-Based Color Palettes:** Create unlimited projects and manage color palettes for each project separately.
@@ -29,47 +40,70 @@
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### 1. Install
 
-- **From Marketplace:**
-Install from the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=binyam.color-store) (search for `Color Store`).
-- **From Terminal:**
+- **From Marketplace:**  
+  [Install Color Store from the Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=binyam.color-store) (search for `Color Store`).
 
-```bash
-code --install-extension color-store-0.0.1.vsix
-```
+- **From VSIX File:**  
+  Download the `.vsix` file and run:
+  ```sh
+  code --install-extension color-store-0.0.1.vsix
+  ```
 
 ### 2. Usage
 
-- Open the sidebar and click the **Color Store** icon.
-- **Add a Color:** Enter a color code and click "Add Color".
-- **Create a Project:** Click "+ New Project" to organize colors by project.
-- **Copy/Preview/Remove:** Use the action buttons next to each color.
-- **Preview in Editor:** Click "Preview" to open a large preview in the main editor area.
+1. Open the sidebar and click the **Color Store** icon.
+2. **Save Your Colors:** Enter a color code and click "Add Color".
+
+   ![Save Your Colors](media/gifs/save-colors.gif)
+
+3. **Use Saved Colors in Projects:**  
+   Use saved colors as Tailwind **bg** or **text** classes.
+
+   ![TailwindCSS bg](media/gifs/applying-tailwind-bg.gif)
+   ![TailwindCSS text](media/gifs/applying-tailwind-text.gif)
+
+4. **Create a Project:**  
+   Click "+ New Project" to organize colors by project.
+
+   ![Create a Project](media/gifs/project.gif)
+
+5. **Preview Your Colors:**
+
+![Preview Color](media/gifs/preview-colors.gif)
+
+- **Remove Colors/Projects:**  
+  Use the delete button (🗑️) to remove any color or project.
+  ![Remove Color](media/gifs/remove.gif)
+
+- **Theme Support:**  
+  Works with all VS Code themes.
+  ![Dark/Light Theme](media/gifs/different-themes.gif)
 
 ---
 
-## ⚙️ Extension Settings
+## Extension Settings
 
 All your colors and projects are stored in VS Code’s global settings. No external accounts or cloud sync required.
 
 ---
 
-## 📢 Feedback & Contributions
+## Feedback & Contributions
 
 Love Color Store? Have ideas or found a bug?  
 [Open an issue or contribute on GitHub](https://github.com/binzam/vs-colorcode).
 
 ---
 
-## 📝 License
+## License
 
 [MIT](LICENSE)
 
 ---
 
-## 🙏 Credits
+## Credits
 
 Built with ❤️ for the VS Code community.
