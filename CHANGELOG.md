@@ -5,7 +5,15 @@ All notable changes to the **Color Store** extension will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.0.2] - 2025-06-12
+## [0.0.3] - 2025-06-13
+
+### Changed
+
+- Improved documentation and added GIFs to README.
+- Added new keywords to `package.json` for Marketplace visibility.
+- Included homepage link in extension metadata.
+
+## [0.0.2] - 2025-06-13
 
 ### Added
 

@@ -12,9 +12,9 @@
 
 **Color Store** is your all-in-one color management tool for VS Code. Effortlessly save, preview, organize, and copy color palettes—perfect for frontend developers, designers, and anyone working with color.
 
----
+![Save Your Colors](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/save-colors.gif)
 
-![Save Your Colors](media/gifs/save-colors.gif)
+---
 
 ## Why Use Color Store?
 
@@ -48,9 +48,9 @@
   [Install Color Store from the Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=binyam.color-store) (search for `Color Store`).
 
 - **From VSIX File:**  
-  Download the `.vsix` file and run:
+  [Download color-store-0.0.3.vsix](https://github.com/binzam/vs-colorcode/releases/download/v0.0.3/color-store-0.0.3.vsix) and run:
   ```sh
-  code --install-extension color-store-0.0.1.vsix
+  code --install-extension color-store-0.0.3.vsix
   ```
 
 ### 2. Usage
@@ -58,30 +58,30 @@
 1. Open the sidebar and click the **Color Store** icon.
 2. **Save Your Colors:** Enter a color code and click "Add Color".
 
-   ![Save Your Colors](media/gifs/save-colors.gif)
+   ![Save Your Colors](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/save-colors.gif)
 
 3. **Use Saved Colors in Projects:**  
    Use saved colors as Tailwind **bg** or **text** classes.
 
-   ![TailwindCSS bg](media/gifs/applying-tailwind-bg.gif)
-   ![TailwindCSS text](media/gifs/applying-tailwind-text.gif)
+   ![TailwindCSS bg](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/applying-tailwind-bg.gif)
+   ![TailwindCSS text](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/applying-tailwind-text.gif)
 
 4. **Create a Project:**  
    Click "+ New Project" to organize colors by project.
 
-   ![Create a Project](media/gifs/project.gif)
+   ![Create a Project](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/project.gif)
 
 5. **Preview Your Colors:**
 
-![Preview Color](media/gifs/preview-colors.gif)
+![Preview Color](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/preview-colors.gif)
 
 - **Remove Colors/Projects:**  
   Use the delete button (🗑️) to remove any color or project.
-  ![Remove Color](media/gifs/remove.gif)
+  ![Remove Color](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/remove.gif)
 
 - **Theme Support:**  
   Works with all VS Code themes.
-  ![Dark/Light Theme](media/gifs/different-themes.gif)
+  ![Dark/Light Theme](https://raw.githubusercontent.com/binzam/vs-colorcode/main/media/gifs/different-themes.gif)
 
 ---
 
@@ -95,6 +95,10 @@ All your colors and projects are stored in VS Code’s global settings. No exter
 
 Love Color Store? Have ideas or found a bug?  
 [Open an issue or contribute on GitHub](https://github.com/binzam/vs-colorcode).
+
+---
+
+[Homepage: https://vs-color-store.netlify.app](https://vs-color-store.netlify.app)
 
 ---
 

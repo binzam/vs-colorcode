@@ -7,17 +7,33 @@
     "type": "git",
     "url": "https://github.com/binzam/vs-colorcode.git"
   },
-  "version": "0.0.1",
+  "homepage": "https://vs-color-store.netlify.app",
+  "version": "0.0.3",
   "icon": "media/icons/color-store-logo.png",
   "galleryBanner.color": {
     "color": "#21314c",
     "theme": "dark"
   },
+  "pricing": "Free",
   "engines": {
     "vscode": "^1.100.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "colors",
+    "color store",
+    "palette",
+    "css",
+    "tailwindcss",
+    "color picker",
+    "frontend",
+    "developer tools",
+    "color management",
+    "vscode",
+    "design",
+    "theme"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
